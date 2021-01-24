@@ -20,7 +20,10 @@ namespace LostAndFound.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<float>("Coordinate")
+                    b.Property<float>("Latitude")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("Longitude")
                         .HasColumnType("REAL");
 
                     b.Property<string>("Description")

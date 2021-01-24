@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0OKoLCdFNspM2x-7aDXUKQxSgNDjBc_s"></script>
-        <script>
+    <script>
         function makeMap(lat, lng) {
         var canvas = document.getElementById('map-canvas'); // 地図を表示する要素を取得
 
@@ -28,8 +28,8 @@
     </script>
     <style>
         #map-canvas {
-            width: 600px;
-            height: 400px;
+            width: 800px;
+            height: 600px;
         }
     </style>
 
@@ -73,15 +73,18 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
         function getMyPlace() {
-            var output = document.getElementById("Item_Coordinate");
+            var outputLongitude = document.getElementById("Item_Longitude");
+            var outputLatitude = document.getElementById("Item_Latitude");
+
             if (!navigator.geolocation) {//Geolocation apiがサポートされていない場合
-                output.innerHTML = '<p>Geolocationはあなたのブラウザーでサポートされておりません</p>';
+                outputLongitude.innerHTML = '<p>Geolocationはあなたのブラウザーでサポートされておりません</p>';
                 return;
             }
             function success(position) {
                 var latitude = position.coords.latitude;
                 var longitude = position.coords.longitude;
-                output.value = latitude + ',' + longitude;
+                outputLatitude.value = latitude;
+                outputLongitude.value = longitude;
                 // 位置情報
                 var latlng = new google.maps.LatLng(latitude, longitude);
                 var map = new google.maps.Map(document.getElementById('map-canvas'), {

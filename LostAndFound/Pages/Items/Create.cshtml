@@ -24,9 +24,14 @@
                 <span asp-validation-for="Item.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Item.Coordinate" class="control-label"></label>
-                <input asp-for="Item.Coordinate" class="form-control" /><button onclick="getMyPlace()">現在位置を取得</button>
-                <span asp-validation-for="Item.Coordinate" class="text-danger"></span>
+                <label asp-for="Item.Longitude" class="control-label"></label>
+                <input asp-for="Item.Longitude" class="form-control" />
+                <span asp-validation-for="Item.Longitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Item.Latitude" class="control-label"></label>
+                <input asp-for="Item.Latitude" class="form-control" /><button onclick="getMyPlace()">現在位置を取得</button>
+                <span asp-validation-for="Item.Latitude" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <div id="map-canvas">ここにマップが表示されます</div>

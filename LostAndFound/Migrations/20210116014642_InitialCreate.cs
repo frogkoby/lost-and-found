@@ -12,9 +12,10 @@ namespace LostAndFound.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Coordinate = table.Column<float>(nullable: false)
+                    Title = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    Latitude = table.Column<float>(nullable: false),
+                    Longitude = table.Column<float>(nullable: false)
                 },
                 constraints: table =>
                 {

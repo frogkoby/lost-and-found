@@ -20,7 +20,10 @@
                 @Html.DisplayNameFor(model => model.Item[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Item[0].Coordinate)
+                @Html.DisplayNameFor(model => model.Item[0].Longitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item[0].Latitude)
             </th>
             <th></th>
         </tr>
@@ -35,7 +38,10 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Coordinate)
+                @Html.DisplayFor(modelItem => item.Longitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitude)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
