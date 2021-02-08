@@ -1,9 +1,8 @@
 @page
 @model LostAndFound.Pages.Items.IndexModel
 
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Index"; }
+@using LostAndFound.Pages.Items
 
 <h1>Index</h1>
 
@@ -29,26 +28,69 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Item) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Longitude)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Latitude)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Item)
+        {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Title)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Longitude)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Latitude)
+    </td>
+    <td>
+        <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+        <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+        <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+    </td>
+</tr>}
     </tbody>
 </table>
+<div id="map-canvas">ここにマップが表示されます</div>
+<script>
+
+
+
+    var markerData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Item,JsonSerializer.Run()));  // マーカーを立てる場所名・緯度・経度
+
+    window.onload = getMyPlace();
+    function getMyPlace() {
+        if (!navigator.geolocation) {//Geolocation apiがサポートされていない場合
+            outputLongitude.innerHTML = '<p>Geolocationはあなたのブラウザーでサポートされておりません</p>';
+            return;
+        }
+        function success(position) {
+            // 位置情報
+            var latlng = new google.maps.LatLng({ lat: markerData[0]['Latitude'], lng: markerData[0]['Longitude'] });
+            var map = new google.maps.Map(document.getElementById('map-canvas'), {
+                zoom: 6,// ズーム値
+                center: latlng,// 中心座標
+            });
+            // マーカーの新規出力
+            // マーカー毎の処理
+            for (var i = 0; i < markerData.length; i++) {
+                markerLatLng = new google.maps.LatLng({ lat: markerData[i]['Latitude'], lng: markerData[i]['Longitude'] }); // 緯度経度のデータ作成
+                markerData[i] = new google.maps.Marker({ // マーカーの追加
+                    position: markerLatLng, // マーカーを立てる位置を指定
+                    map: map // マーカーを立てる地図を指定
+                });
+
+                @*infoWindow[i] = new google.maps.InfoWindow({ // 吹き出しの追加
+                    content: '<div class="sample">' + markerData[i]['Title'] + '</div>' // 吹き出しに表示する内容
+                });
+
+                markerEvent(i); // マーカーにクリックイベントを追加*@
+            }
+        };
+        function error() {
+                //エラーの場合
+                output.innerHTML = "座標位置を取得できません";
+        };
+        navigator.geolocation.getCurrentPosition(success, error);//成功と失敗を判断
+    }
+</script>

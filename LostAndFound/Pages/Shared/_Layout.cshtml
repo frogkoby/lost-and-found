@@ -6,33 +6,13 @@
     <title>@ViewData["Title"] - LostAndFound</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0OKoLCdFNspM2x-7aDXUKQxSgNDjBc_s"></script>
-    <script>
-        function makeMap(lat, lng) {
-        var canvas = document.getElementById('map-canvas'); // 地図を表示する要素を取得
-
-            var latlng = new google.maps.LatLng(lat, lng);  // 中心の位置（緯度、経度）
-
-        var mapOptions = {  // マップのオプション
-                zoom: 17,
-            center: latlng,
-        };
-        var map = new google.maps.Map(canvas, mapOptions); //作成
-        return map;
-      }
-
-      //ページのロードが完了したら地図を読み込む
-      window.onload = function(){
-                makeMap(35.446806, 139.636163);
-        };
-    </script>
     <style>
         #map-canvas {
-            width: 800px;
-            height: 600px;
+            width: 600px;
+            height: 400px;
         }
     </style>
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0OKoLCdFNspM2x-7aDXUKQxSgNDjBc_s"></script>
 </head>
 <body>
     <header>
@@ -71,39 +51,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        function getMyPlace() {
-            var outputLongitude = document.getElementById("Item_Longitude");
-            var outputLatitude = document.getElementById("Item_Latitude");
-
-            if (!navigator.geolocation) {//Geolocation apiがサポートされていない場合
-                outputLongitude.innerHTML = '<p>Geolocationはあなたのブラウザーでサポートされておりません</p>';
-                return;
-            }
-            function success(position) {
-                var latitude = position.coords.latitude;
-                var longitude = position.coords.longitude;
-                outputLatitude.value = latitude;
-                outputLongitude.value = longitude;
-                // 位置情報
-                var latlng = new google.maps.LatLng(latitude, longitude);
-                var map = new google.maps.Map(document.getElementById('map-canvas'), {
-                    zoom: 15,// ズーム値
-                    center: latlng,// 中心座標
-                });
-                // マーカーの新規出力
-                new google.maps.Marker({
-                    map: map,
-                    position: latlng,
-                });
-            };
-            function error() {
-                //エラーの場合
-                output.innerHTML = "座標位置を取得できません";
-            };
-            navigator.geolocation.getCurrentPosition(success, error);//成功と失敗を判断
-        }
-    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
