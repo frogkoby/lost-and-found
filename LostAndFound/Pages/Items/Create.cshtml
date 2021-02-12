@@ -1,7 +1,8 @@
 @page
 @model LostAndFound.Pages.Items.CreateModel
-
 @{ ViewData["Title"] = "Create"; }
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ }
 
 <h1>Create</h1>
 
@@ -9,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Item.Title" class="control-label"></label>
@@ -20,6 +21,12 @@
                 <label asp-for="Item.Description" class="control-label"></label>
                 <input asp-for="Item.Description" class="form-control" />
                 <span asp-validation-for="Item.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Item.PhotoPass" class="control-label"></label>
+                <input asp-for="Item.PhotoPass" class="form-control" />
+                <div>ファイルのアップロード<input type="file" asp-for="FileData" /></div>
+                <span asp-validation-for="Item.PhotoPass" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Item.Longitude" class="control-label"></label>
@@ -44,8 +51,7 @@
 <div>
     <a asp-page="Index">Back to List</a>
 </div>
-<script>
-    function getMyPlace() {
+<script>function getMyPlace() {
         var outputLongitude = document.getElementById("Item_Longitude");
         var outputLatitude = document.getElementById("Item_Latitude");
 
@@ -77,10 +83,29 @@
         navigator.geolocation.getCurrentPosition(success, error);//成功と失敗を判断
     }
     $(function () {
-        getMyPlace();
-    });
+        $('input[type=file]').after('<span></span>');
 
- </script>
+        // アップロードするファイルを選択
+        $('input[type=file]').change(function () {
+            var file = $(this).prop('files')[0];
+
+            // 画像以外は処理を停止
+            if (!file.type.match('image.*')) {
+                // クリア
+                $(this).val('');
+                $('span').html('');
+                return;
+            }
+
+            // 画像表示
+            var reader = new FileReader();
+            reader.onload = function () {
+                var img_src = $('<img>').attr('src', reader.result);
+                $('span').html(img_src);
+            }
+            reader.readAsDataURL(file);
+        });
+    });</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

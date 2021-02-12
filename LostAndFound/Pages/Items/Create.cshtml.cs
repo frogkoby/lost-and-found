@@ -6,6 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using LostAndFound.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 
 namespace LostAndFound.Pages.Items
 {
@@ -25,6 +31,7 @@ namespace LostAndFound.Pages.Items
 
         [BindProperty]
         public Item Item { get; set; }
+        public IFormFile FileData { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
@@ -38,7 +45,19 @@ namespace LostAndFound.Pages.Items
             _context.Item.Add(Item);
             await _context.SaveChangesAsync();
 
+            // 保存先を取得
+            string filePath = @"/Users/kobayashitatsuya/Desktop/LostAndFound/LostAndFound/wwwroot/upimage";
+            System.IO.Stream stream = FileData.OpenReadStream();
+            byte[] buffer = new byte[stream.Length];
+            stream.Read(buffer, 0, (int)stream.Length);
+
+            System.IO.FileStream fs = new System.IO.FileStream(filePath + FileData.FileName, System.IO.FileMode.CreateNew);
+            fs.Write(buffer, 0, buffer.Length);
+            fs.Close();
+            stream.Close();
+
             return RedirectToPage("./Index");
         }
     }
+
 }
