@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
 
 namespace LostAndFound.Pages.Items
@@ -37,25 +38,30 @@ namespace LostAndFound.Pages.Items
         // more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
 
-            _context.Item.Add(Item);
-            await _context.SaveChangesAsync();
-
-            // 保存先を取得
-            string filePath = @"/Users/kobayashitatsuya/Desktop/LostAndFound/LostAndFound/wwwroot/upimage";
+            // アップロードファイルの保存先を取得
+            string filePath = @"/Users/kobayashitatsuya/Desktop/LostAndFound/LostAndFound/wwwroot/upimage/";
             System.IO.Stream stream = FileData.OpenReadStream();
             byte[] buffer = new byte[stream.Length];
             stream.Read(buffer, 0, (int)stream.Length);
+            string newfileName = Path.GetRandomFileName() + FileData.FileName;
 
-            System.IO.FileStream fs = new System.IO.FileStream(filePath + FileData.FileName, System.IO.FileMode.CreateNew);
+            System.IO.FileStream fs = new System.IO.FileStream(filePath + newfileName, System.IO.FileMode.CreateNew);
             fs.Write(buffer, 0, buffer.Length);
             fs.Close();
             stream.Close();
 
+            //DBへ保存
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            //ファイルの保存先のパスをPhotoPass1カラムに引き渡す
+            Item.PhotoPass = "/upimage/" + newfileName;
+            _context.Item.Add(Item);
+            await _context.SaveChangesAsync();
+
+            //終了後の戻り先
             return RedirectToPage("./Index");
         }
     }

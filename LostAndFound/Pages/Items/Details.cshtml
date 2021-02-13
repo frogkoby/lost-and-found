@@ -21,6 +21,12 @@
             @Html.DisplayFor(model => model.Item.Description)
         </dd>
         <dt class="col-sm-2">
+            写真
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@Model.Item.PhotoPass" class="img-responsive" />
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Item.Longitude)
         </dt>
         <dd class="col-sm-10">
